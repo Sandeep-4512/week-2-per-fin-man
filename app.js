@@ -4,28 +4,31 @@ import bodyParser from "body-parser";
 import { connectDB } from "./DB/Database.js";
 import transactionRoutes from "./Routers/Transactions.js";
 import userRoutes from "./Routers/userRouter.js";
+import borrowRoutes from "./Routers/borrowTransactionRoutes.js"; // ✅ Import Borrow Routes
 
-//app is express server
+// Express server instance
 const app = express();
 const port = 4000;
 
-//database connection triggered
+// Connect to the database
 connectDB();
-//we are registering cors - Cross Origin Resource Sharing - This allow our server to respond to our frontend requests
-app.use(cors());
 
-// Middleware - is a logic which executes before the backend
-app.use(express.json());//{key:value}
-app.use(bodyParser.urlencoded({ extended: false }));//name=hmg
+// Middleware setup
+app.use(cors()); // Enable Cross-Origin Resource Sharing
+app.use(express.json()); // Allow JSON payloads
+app.use(bodyParser.urlencoded({ extended: false })); // Parse URL-encoded data
 
-// Adding 2 routes
-app.use("/api/v1", transactionRoutes);//all end points related to credit/debit transactions
-app.use("/api/auth", userRoutes);//this all end points related to users -> login, signup
+// Registering API routes
+app.use("/api/v1", transactionRoutes); // Routes for credit/debit transactions
+app.use("/api/auth", userRoutes); // Routes for user authentication (login, signup)
+app.use("/api/borrow", borrowRoutes); // ✅ Routes for Borrow to Friend feature
 
+// Root endpoint to check if the server is running
 app.get("/", (req, res) => {
   res.send("FinManager Server is working");
 });
 
+// Start the server
 app.listen(port, () => {
-  console.log(`Server is listening on http://localhost:${port}`);
+  console.log(Server is listening on http://localhost:${port});
 });
